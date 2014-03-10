@@ -1,0 +1,461 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,top=1cm,left=5mm,text={200mm,272mm}]{geometry}
+
+\usepackage[usenames,dvipsnames,table]{xcolor}
+\usepackage[xetex]{graphicx}
+\usepackage{tikz}
+\definecolor{light-gray}{gray}{0.55}
+
+\usepackage{fontspec,polyglossia,xltxtra,xparse,calc,tabu,sectsty}
+\setdefaultlanguage{czech}
+\defaultfontfeatures{Mapping=tex-text,Ligatures=Rare}
+\setromanfont{Linux Libertine O}
+\partfont{\centering}
+
+\newenvironment{sidecolumn}
+{
+\begin{minipage}[t]{25mm}
+  \begin{tikzpicture}[overlay]
+    \draw[line width=1pt] (0,0) rectangle (\textwidth,-1\textheight);
+  \end{tikzpicture}
+  \begin{center}
+}
+{
+  \end{center}
+\end{minipage}
+}
+
+\newenvironment{skilltab}[1][t]
+{
+\begin{tabular}[#1]{|r|l>{\sc}r|r|} \hline
+  \textsc{Hod} & \multicolumn{2}{l|}{\textsc{Dovednost}} & \textsc{Bd.} \\ \hline
+}
+{
+\end{tabular}
+}
+\newenvironment{wideskilltab}
+{
+\begin{tabu} to \linewidth {|r|X|r|} \hline
+  \textsc{Hod} & \textsc{Dovednost} & \textsc{Body} \\ \hline
+}
+{
+\end{tabu}
+}
+
+\newenvironment{meleewpns}
+{
+\begin{tabu} to \linewidth {|r|X[2,l,b]|X[1,l,b]|r|r|} \firsthline
+  \rowfont{\sc\color{white}} \rowcolor{black}
+    Hod & Zbraň & Zranění & Dosah & Kryt \\ \hline
+}
+{
+\end{tabu}
+}
+\DeclareDocumentCommand{\meleewpn}{O{~} O{~} O{~} O{~} O{~} O{~}}{%
+% Weapon, Lvl, Damage, Range, Parry, Notes
+  #2 & #1 & #3 & #4 & #5 \\ \hline
+  \multicolumn{5}{|l|}{Poznámky: #6} \\ \tabucline[0.25em]{-}
+}
+
+\newenvironment{rangedwpns}
+{
+\begin{tabu} to \linewidth {|r|X[2,l,b]|X[1,l,b]|r|r|c|} \firsthline
+  \rowfont{\sc\color{white}} \rowcolor{black}
+    Hod & Zbraň & Zranění & Přesnost & Dostřel & Síla \\ \hline 
+}
+{
+\end{tabu}
+}
+\DeclareDocumentCommand{\rangedwpn}{O{~}O{~}O{~}O{~}O{~}O{~}O{~}O{~}}{%
+% Weapon, Lvl, Damage, Acc, Range, ST, Ammo, notes
+  #2 & #1 & #3 & #4 & #5 & #6 \\ \hline
+  \multicolumn{6}{|l|}{Munice: \textcolor{light-gray}{#7}} \\ \hline
+  \multicolumn{6}{|l|}{Poznámky: #8} \\ \tabucline[0.25em]{-}
+}
+
+\DeclareDocumentCommand{\attribute}{O{10} O{0} m}{%
+  \textsc{\large #3}\\[0pt]%
+  [\hspace{1.5em}]\\[-1\baselineskip]
+  {\color{light-gray} #2}\\[0.5em]%
+  {\Huge #1}\\%
+}
+
+\newcommand{\HRule}{\rule{\textwidth}{1pt}\\[0.4em]}
+\newcommand{\wideskill}[2]{\multicolumn{2}{|l}{#1} & #2}
+\newcommand{\tabsep}[1]{\rowcolor[gray]{0}\multicolumn{4}{|c|}{\it\color{White} #1}}
+\newcommand{\subtab}[1]{\hspace{1em}\textit{#1}}
+\newcommand{\mandala}[1][1]{% 4cm diameter mandala
+\begin{tikzpicture}[scale=#1]
+  \draw[line width=1pt] (0,0) circle (2cm) circle (1.41cm) circle (0.71cm);
+  \draw (1,0) circle (1cm);
+  \draw (0,1) circle (1cm);
+  \draw (-1,0) circle (1cm);
+  \draw (0,-1) circle (1cm);
+  \draw (0.7,0.7) circle (1cm);
+  \draw (-0.7,0.7) circle (1cm);
+  \draw (0.7,-0.7) circle (1cm);
+  \draw (-0.7,-0.7) circle (1cm);
+\end{tikzpicture}
+}
+
+\title{Rahak}
+\author{hraje Khardix}
+\date{}
+
+\begin{document}
+
+\pagestyle{empty}
+\renewcommand{\thempfootnote}{\arabic{mpfootnote}}
+
+\newcommand{\thethrust}{1k-2} % bod
+\newcommand{\theswing}{1k} % sek
+\newcommand{\thespeed}{5,5} % rychlost
+\newcommand{\thedodge}{7} % uhyb
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Front page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{sidecolumn}
+  \attribute[12][40]{Obratnost}
+  \HRule
+  \attribute{Síla}
+  \HRule
+  \attribute{Životy}
+\end{sidecolumn}
+\begin{minipage}[t]{135mm}
+  \begin{center}
+    \textsc{{\Huge Rahak}\\{\small hraje Khardix}}\\[1em]
+
+    \begin{tabular}{|c||c|c||c||c|c||c|} \hline
+      Bod:~\thethrust & Rychlost:~\thespeed & Smysly:~13 &
+        Úhyb:~\thedodge & Vůle:~13 & BL:~10\,kg & Sek:~\theswing\\ \hline
+      \multicolumn{7}{|l|}{Volné body:~{\color{light-gray}3}} \\ \hline
+    \end{tabular}
+  \end{center}
+
+  \hrule
+  \medskip
+
+  \textbf{Vzhled:}
+  185\,cm, 70\,kg, hubený, kratší hnědé vlasy, zelené oči, všední vzhled.
+
+  \textbf{Povaha:}
+  Váží si kvalitně provedené práce a~schopných jedinců. Nemá
+  rád pocit bezmoci, dlouhodobou fyzickou práci a lidi, kteří se příliš
+  spoléhají na ostatní nebo na štěstí. Má rád knihy, exotické příběhy a~věci
+  z~daleka.
+
+  \medskip
+  \hrule
+  \medskip
+  \begin{minipage}[t]{0.48\textwidth}
+    \section*{Výhody}
+    \begin{itemize}
+      \item \textbf{Charisma +1:} Bonus na všechny hody na reakci v~aktivní
+        konverzaci.
+      \item \textbf{Bleskový počtář:} \emph{Hráč} může kdykoliv použít kalkuačku
+        na řešení matematických problémů \emph{postavy}.
+      \item \textbf{Dobrá pamět:} Automaticky si pamatuje obecné informace, s
+        hodem na \textsc{Int} i~detaily.
+      \item \textbf{Jazykový talent:} Učí se jazyky za poloviční cenu a čas.
+      \item \textbf{Dobrá rovnováha:} Bonus +6 na kluzkém povrchu, v~boji +4
+        proti sražení, zakopnutí\ldots
+    \end{itemize}
+  \end{minipage}
+  \hspace{0.02\textwidth}
+  \begin{minipage}[t]{0.48\textwidth}
+    \section*{Nevýhody}
+    \begin{itemize}
+      \item \textbf{Hemofilie:} Každou minutu ztrácí tolik životů, kolik bylo
+        původní zranění, dokud není ošetřen (\emph{První pomoc}). V~případě
+        bodného zranění do hrudi i po ošetření ztrácí životy každý den, dokud
+        není operován nebo jinak není zastaveno vnitřní krvácení.
+      \item \textbf{Zvědavý\,(12)}
+    \end{itemize}
+    \section*{Perky}
+    \begin{itemize}
+      \item Starání se o jedovatý hmyz (\emph{Jedy}).
+    \end{itemize}
+  \end{minipage}
+  \medskip
+  \hrule
+  \medskip
+
+  \resizebox{\textwidth}{!}{\centering %
+    \begin{skilltab}
+
+      \tabsep{Jazyky, kultury\ldots} \\ \hline
+      \wideskill{Angličtina}{plynule} & 0* \\ \hline
+      \wideskill{Španělština}{plynule} &  \\ \hline
+      \wideskill{Hindu}{plynule} &  \\ \hline
+      \wideskill{Němčina}{plynule} & 1 \\ \hline
+      \wideskill{Matematika}{lepší} & 3 \\ \hline
+      \multicolumn{4}{|l|}{Kultury: Císařství, Rudá škola} \\ \hline
+
+      \tabsep{Boj} \\ \hline
+      18 & Vrhací nůž & + Obr/l & 2 \\ \hline
+      13 & Tesák & Obr/l & 2 \\ \hline
+      11 & Judo & Obr/t & 2 \\ \hline
+      12 & Śkrtící šnůra & Obr/l & 1 \\ \hline
+      12 & Kuše & Obr/l & 1 \\ \hline
+
+      \tabsep{Fyzické výkony} \\ \hline
+      14 & Akrobacie & + Obr/t & 1 \\ \hline
+      12 & Šplh & + Obr/s & 1 \\ \hline
+      10 & Plavání & Zdr/l & 1 \\ \hline
+      11 & Jezdectví & & 1 \\ \hline
+      13 & Práce s koněm & & 1 \\ \hline
+      12 & Plížení & Obr/s & 2 \\ \hline
+      12 & Přežití (civilizace) & Int/s & 1 \\ \hline
+
+    \end{skilltab}
+    \begin{skilltab}
+
+      \tabsep{Práce} \\ \hline
+      12 & Účetnictví & Int/s & 1 \\ \hline
+      12 & Administrativa & Int/s & 1 \\ \hline
+      12 & Rešerše & Int/s & 1 \\ \hline
+      13 & Hindská poezie & + Int/t & 1 \\ \hline
+      11 & Jedy -- Kurare & Int/t & 1 \\ \hline
+         & \multicolumn{2}{l|}{\hspace{-3pt}\textit{Vhodné chování:}} & \\ \hline
+      13 & -- Rudá škola & Int/l & 1 \\ \hline
+
+      \tabsep{Nepoctivé obory} \\ \hline
+      10 & Útěk & Obr/t & 1 \\ \hline
+      13 & První pomoc & Int/l & 1 \\ \hline
+      12 & Sledování (město) & Int/s & 1 \\ \hline
+      12 & Morseovka, gesta & Int/s & 1 \\ \hline
+      12 & Pronášení & Int/s & 1 \\ \hline
+      12 & Převleky & Int/s & 1 \\ \hline
+      12 & Herectví & Int/s & 1 \\ \hline
+      12 & Otevírání zámků & Int/s & 1 \\ \hline
+      11 & Padělání & Int/t & 1 \\ \hline
+      11 & Kryptografie & Int/t & 1 \\ \hline
+      11 & Špionážní analýza & Int/t & 1 \\ \hline
+      12 & Znalost ulice & Int/s & 1 \\ \hline
+
+    \end{skilltab}
+  }
+
+  \medskip
+
+  \begin{wideskilltab}
+    & & \\ \hline
+    & & \\ \hline
+    & & \\ \hline
+    & & \\ \hline
+  \end{wideskilltab}
+
+\end{minipage}
+\begin{sidecolumn}
+  \attribute[13][60]{Inteligence}
+  \HRule
+  \attribute{Zdraví}
+  \HRule
+  \attribute{Únava}
+\end{sidecolumn}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Magie
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\begin{minipage}[t]{162mm}
+
+\part*{Magie}
+
+  \begin{minipage}[t]{0.48\textwidth}
+
+    \section*{Magické dovednosti}\vspace{-1em}
+    \begin{skilltab}
+      12 & Míření výboje & Obr/l & 1 \\ \hline
+      11 & Zvýšení kapacity & Vůl/t & 1 \\ \hline
+        & Práce s energií & & 8 \\ \hline
+        & Dotykové napojení & & 4 \\ \hline
+        & Konstrukce kouzla & & 2 \\ \hline
+        & Porozumnění vjemu kouzla & & 1 \\ \hline
+        & Vnímání energie & & 3 \\ \hline
+    \end{skilltab}
+
+  \end{minipage}
+  \hspace{0.02\textwidth}
+  \begin{minipage}[t]{0.48\textwidth}
+
+    \section*{Hotová kouzla}\vspace{-1em}
+    \begin{skilltab}
+      & Výboj & \hspace{2.7em} & 1 \\ \hline
+      & Hojení organismu & & 1 \\ \hline
+      & Regenerace (dorůstání) & & 3 \\ \hline
+      & Doplnění únavy & & 1 \\ \hline
+      & Posun/Nabití & & 1 \\ \hline
+    \end{skilltab}
+
+  \end{minipage}
+
+  \section*{\centering Struktury}
+  \begin{minipage}[c]{2cm}
+    \mandala[0.5]
+  \end{minipage}
+  \hspace{1em}
+  \begin{skilltab}[c]
+    & Napojení na reálný prostor přes 2D disk & \hspace{2.7em} & 1 \\ \hline
+    & Aritmetrika & & 1 \\ \hline
+    & Geometrie & & 1 \\ \hline
+    & Logické operace & & 1 \\ \hline
+    & Měření času & & 1 \\ \hline
+    & Rozeznání skupenství & & 1 \\ \hline
+    & Rozeznání života & & 1 \\ \hline
+    & Světlo & & 1 \\ \hline
+    & Prostá izolační struktura & & 1 \\ \hline
+    & Průběžné čerpání z izolační struktury & & 1 \\ \hline
+    & Záznamová struktura & & 1 \\ \hline
+  \end{skilltab}
+  \hspace{1em}
+  \begin{minipage}[c]{2cm}
+    \mandala[0.5]
+  \end{minipage}
+
+  \vfill
+
+  \section*{Stav mága}\vspace{-1em}
+  \begin{tabular}[t]{|r|l|} \hline
+    \rowcolor[gray]{0} & \textsc{\color{White} Stav} \\ \hline
+    +4 & Extrémní kladné pocity: zamilovanost, vášeň, ohromná úleva, \ldots \\ \hline
+    +3 & Silný kladný pocit: vděk, hrdost otce, láska, silná rozkoš, \ldots \\ \hline
+    +2 & Kladný cit (každodenní láska, úspěch), pohoda (pohodlí, dobré jídlo), \ldots \\ \hline
+    +1 & Příjemná vyrovnanost, dlouhodobá spokojenost, jen drobné problémy \\ \hline
+     0 & Mírné nepohodlí, rozladění/frustrace, obtěžování, únava, \ldots \\ \hline
+    -1 & Mírné strádání, rozčilení, výraznější únava (pod 2/3 z~maxima) \\ \hline
+    -2 & Strádání, silná záporná emoce, výrazný neúspěch, únava pod 1/3 \\ \hline
+    -3 & Extrémní strádání, deprese, vyčerpání, ztráta milého, hrůza, \ldots \\ \hline
+    -4 & Vážné zranění, mučení, zabití dítěte, \ldots \\ \hline
+  \end{tabular}
+  \begin{tabular}[t]{|r|r|} \hline
+    \rowcolor[gray]{0} \textsc{\color{White} Vydáno} & \textsc{\color{White} Únava} \\ \hline
+     Pod 10\,\% &  0 \\ \hline
+     10-20\,\% &  -1 \\ \hline
+     21-40\,\% &  -2 \\ \hline
+     41-60\,\% &  -4 \\ \hline
+     61-80\,\% &  -8 \\ \hline
+    81-100\,\% & -16 \\ \hline
+  \end{tabular}
+
+\end{minipage}
+\begin{sidecolumn}
+  \textsc{\large Energie (\%)}
+\end{sidecolumn}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Boj & vybavení
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\part*{Boj}
+
+\begin{center}
+  \begin{tabular}{|c|c||c|c|}
+    \hline
+    Bod:~\thethrust & Sek:~\theswing & Rychlost:~\thespeed & Úhyb:~\thedodge \\
+    \hline
+  \end{tabular}
+\end{center}
+\vspace{-1\baselineskip}
+
+\section*{Boj zblízka}
+\begin{meleewpns}
+  \meleewpn
+  \meleewpn
+  \meleewpn
+\end{meleewpns}
+
+\section*{Boj na dálku}
+\begin{rangedwpns}
+  \rangedwpn[Vrhací nože -- {\it Large Throwing Knives}]%
+    [19][1k-2 bod][1][10/20][6][15]%
+    [+1 k~dovednosti za kvalitu; -2 v boji na blízko]
+  \rangedwpn
+  \rangedwpn
+\end{rangedwpns}
+\bigskip
+
+\hspace{-0.63cm}
+\begin{minipage}[t]{0.49\linewidth}
+
+  \section*{Zbroj}
+  \begin{tabu} to \linewidth {|r|l|c|X[1,l,b]|r|} \firsthline
+    \rowfont{\sc\color{White}} \rowcolor{black}
+    DR & Lokace & Hod & Zbroj & Váha \\ \hline
+
+       & Hlava & 3-5 & & \\ \hline
+       & \subtab{Lebka} & 3-4 & & \\ \hline
+       & \subtab{Obličej} & 5 & & \\ \hline
+
+       & Krk & 17-18 & & \\ \hline
+
+       & Torzo & 9-11\footnotemark[1] & & \\ \hline
+       & \subtab{Hruď} & 9-10\footnotemark[1] & & \\ \hline
+       & \subtab{Břicho}\footnotemark[2] & 11 & & \\ \hline
+       & \subtab{Třísla} & & & \\ \hline
+
+       & Paže & 8, 12 & & \\ \hline
+       & \subtab{Rameno} & \footnotemark[3] & & \\ \hline
+       & \subtab{Nadloktí} & \footnotemark[3] & & \\ \hline
+       & \subtab{Loket} & \footnotemark[3] & & \\ \hline
+       & \subtab{Předloktí} & \footnotemark[3] & & \\ \hline
+
+       & Ruce & 15 & & \\ \hline
+
+       & Nohy & 6-7, 13-14 & & \\ \hline
+       & \subtab{Stehno} & \footnotemark[3] & & \\ \hline
+       & \subtab{Koleno} & \footnotemark[3] & & \\ \hline
+       & \subtab{Holeň} & \footnotemark[3] & & \\ \hline
+
+       & Chodidla & 16 & & \\ \hline
+
+    \multicolumn{4}{|l|}{\sc Celková váha:} & \\ \hline
+  \end{tabu}
+    \footnotetext[1]{Při \emph{bodu} hod 1k; na 1 jsou zasaženy životně důležité
+    orgány (\emph{vitals}).}
+    \footnotetext[2]{Kryje i \emph{třísla}.}
+    \footnotetext[3]{
+      Kryje pouze částečně! Při zásahu hod 1k:\\
+      \subtab{Ruka}: 1-3 předloktí, 4 loket, 5 nadloktí, 6 rameno.\\
+      \subtab{Noha}: 1-3 holeň, 4 koleno, 5-6 stehno.
+    }
+
+\end{minipage}
+\hspace{0.03\linewidth}
+\begin{minipage}[t]{0.48\linewidth}
+  \section*{Vzdálenosti \& rychlosti}
+  \begin{tabu} to 0.5\linewidth {|X[1,r,b]|X[1,r,b]|} \firsthline
+    \rowfont{\sc\color{white}} \rowcolor{black}
+      Velikost & Postih \\ \hline
+      \taburowcolors{White .. light-gray!30}
+
+      0-2\,m &   0 \\ \hline
+        3\,m &  -1 \\ \hline
+        5\,m &  -2 \\ \hline
+        7\,m &  -3 \\ \hline
+       10\,m &  -4 \\ \hline
+       15\,m &  -5 \\ \hline
+       20\,m &  -6 \\ \hline
+       30\,m &  -7 \\ \hline
+       50\,m &  -8 \\ \hline
+       70\,m &  -9 \\ \hline
+      100\,m & -10 \\ \hline
+      150\,m & -11 \\ \hline
+      200\,m & -12 \\ \hline
+      300\,m & -13 \\ \hline
+      500\,m & -14 \\ \hline
+      700\,m & -15 \\ \hline
+  \end{tabu}
+\end{minipage}
+
+\newpage
+\part*{Vybavení}
+
+\section*{U sebe}
+\vspace{0.3\textheight}
+\section*{Zavazadlo (truhla/batoh/\ldots)}
+\vspace{0.3\textheight}
+\section*{V~úschově (doma, \ldots)}
+
+\end{document}
