@@ -4,4 +4,4 @@ This is Character sheet of my character in our current campaign, written in
 XeLaTeX. It's kept here as backup and for inspiration.
 
 All files in this repository are freely available under CreativeCommons license
-[CC-BY-SA]:[http://creativecommons.org/licenses/by-sa/4.0/].
+[CC-BY-SA](http://creativecommons.org/licenses/by-sa/4.0/).
